@@ -16,9 +16,9 @@ export async function apiCreate(req, res) {
       complete : false,
       date: new Date()
     }
-    res.send(await db.create(newData));
+    res.sendStatus(await db.create(newData));
   }
 };
  export async function apiDelete(req, res) {
-   res.send(await db.delete(req.params.id));
+   res.sendStatus(await db.delete(req.params.id));
  };

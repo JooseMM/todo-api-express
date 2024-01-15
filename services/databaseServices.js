@@ -52,7 +52,7 @@ export class DbService {
       const ID = new ObjectId(id);
       await this.client.connect();
       await this.collection.deleteOne({ _id: ID });
-      return "Deleted";
+      return 200;
     } catch(err) {
       console.log("error while trying to delete a document " + err);
     } finally {
