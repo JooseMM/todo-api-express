@@ -1,8 +1,9 @@
 import {  MongoClient, ObjectId, ServerApiVersion  } from 'mongodb';
+import 'dotenv/config';
 
 export class DbService {
-  url = 'mongodb+srv://JooseMM:989801@practices.qrbgokh.mongodb.net/?retryWrites=true&w=majority';
-  client = new MongoClient(this.url, {
+  DB_URL = process.env.DATABASE_URL;
+  client = new MongoClient(this.DB_URL, {
     serverApi: {
       version: ServerApiVersion.v1,
       strict: true,

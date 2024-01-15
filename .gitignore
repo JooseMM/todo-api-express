@@ -1,3 +1,4 @@
 #Ignore modules
 node_modules/
 #Other things
+.env

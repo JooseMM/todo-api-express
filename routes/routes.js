@@ -9,7 +9,3 @@ router.delete("/:id", apiDelete);
 
 export default router;
 
-//test from terminal
-//getAll: curl http://localhost:3000/
-//post: curl --data "task=Clean the house!!" http://localhost:3000/
-//delete: curl -X DELETE  http://localhost:3000/id
