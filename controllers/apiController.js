@@ -1,4 +1,4 @@
-import { DbService } from "../services/db-services.js";
+import { DbService } from "../services/databaseServices.js";
     
  const db = new DbService(); 
  export async function apiGetAll (_req,res) {
