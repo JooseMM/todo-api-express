@@ -27,7 +27,7 @@ export async function apiCreate(req, res) {
   }
 };
  export async function apiDelete(req, res) {
-   const id = req.body.id;
+   const id = req.params.id;
    if(!id) { return res.sendStatus(400).send("Not a valid id provided")}
    else {
      await db.delete(id)
