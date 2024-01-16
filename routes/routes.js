@@ -1,5 +1,5 @@
 import express from "express";
-import { apiGetAll, apiCreate, apiDelete } from "../controllers/apiController.js"
+import { apiGetAll, apiCreate, apiGet, apiDelete } from "../controllers/apiController.js"
 const router = express.Router();
 
 router.get("/", apiGetAll);
