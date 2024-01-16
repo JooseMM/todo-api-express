@@ -9,11 +9,11 @@ import { DbService } from "../services/databaseServices.js";
  };
 export async function apiCreate(req, res) {
   if(!req.body.task) {
-    res.json(req.body.task);
+    res.json("Bad Request: " + req.body.task);
   } else {
     const newData = {
-      task : req.body.task,
-      complete : false,
+      task: req.body.task,
+      complete: false,
       date: new Date()
     }
     res.sendStatus(await db.create(newData));
