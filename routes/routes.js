@@ -3,7 +3,7 @@ import { apiGetAll, apiCreate, apiDelete } from "../controllers/apiController.js
 const router = express.Router();
 
 router.get("/", apiGetAll);
-//router.get("/", apiGet);
+router.get("/get/:id", apiGet);
 router.post("/", apiCreate);
 router.delete("/", apiDelete);
 
