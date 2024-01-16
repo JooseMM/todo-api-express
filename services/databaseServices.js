@@ -30,7 +30,7 @@ export class DbService {
       return await this.collection.find({ _id: ID }).toArray();
 
     } catch(err){
-      console.log("erro :" + err);
+      console.log("Error while trying to find a document: " + err);
     } finally {
       await this.client.close();
     }
@@ -39,10 +39,9 @@ export class DbService {
     try {
       await this.client.connect();
       await this.collection.insertOne(newData);
-      return 201;
     } 
     catch(err) {
-      return 500;
+      return 'Error while trying to create a document: ' + err ;
     } 
     finally {
       await this.client.close();
@@ -53,9 +52,8 @@ export class DbService {
       const ID = new ObjectId(id);
       await this.client.connect();
       await this.collection.deleteOne({ _id: ID });
-      return 200;
     } catch(err) {
-      console.log("error while trying to delete a document " + err);
+      console.log("Error while trying to delete a document: " + err);
     } finally {
       await this.client.close();
     }

@@ -9,16 +9,21 @@ import { DbService } from "../services/databaseServices.js";
  };
 export async function apiCreate(req, res) {
   if(!req.body.task) {
-    res.json("Bad Request: " + req.body.task);
+    res.sendStatus(400).send("Bad Request: " + req.body.task);
   } else {
     const newData = {
       task: req.body.task,
       complete: false,
       date: new Date()
     }
-    res.sendStatus(await db.create(newData));
+    await db.create(newData);
+    res.send(await db.getAll());
   }
 };
  export async function apiDelete(req, res) {
-   res.sendStatus(await db.delete(req.params.id));
+   if(!req.params.id) { res.sendStatus(400).send("Not a valid id provided")}
+   else {
+     await db.delete(req.params.id)
+     res.sendStatus(await db.getAll());
+   }
  };
