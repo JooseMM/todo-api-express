@@ -2,10 +2,10 @@ import express from "express";
 import { apiGetAll, apiGet, apiCreate, apiDelete } from "../controllers/apiController.js"
 const router = express.Router();
 
-router.get("/", apiGetAll);
-router.get("/:id", apiGet);
+router.get("/get-all", apiGetAll);
+router.get("/get-one", apiGet);
 router.post("/", apiCreate);
-router.delete("/:id", apiDelete);
+router.delete("/", apiDelete);
 
 export default router;
 

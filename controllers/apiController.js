@@ -21,9 +21,10 @@ export async function apiCreate(req, res) {
   }
 };
  export async function apiDelete(req, res) {
-   if(!req.params.id) { res.sendStatus(400).send("Not a valid id provided")}
+   const id = req.body.id;
+   if(!id) { res.sendStatus(400).send("Not a valid id provided")}
    else {
-     await db.delete(req.params.id)
-     res.sendStatus(await db.getAll());
+     await db.delete(id)
+     res.send(await db.getAll());
    }
  };
