@@ -5,11 +5,14 @@ import { DbService } from "../services/databaseServices.js";
     res.send(await db.getAll());
   };
  export async function apiGet(req, res) {
+  if(!id) {
+    return res.sendStatus(400).send("Not a valid id provided :" + id)
+  }
    res.send(await db.get(req.params.id));
  };
 export async function apiCreate(req, res) {
   if(!req.body.task) {
-    res.sendStatus(400).send("Bad Request: " + req.body.task);
+    return res.sendStatus(400).send("Bad Request: " + req.body.task);
   } else {
     const newData = {
       task: req.body.task,
@@ -22,7 +25,7 @@ export async function apiCreate(req, res) {
 };
  export async function apiDelete(req, res) {
    const id = req.body.id;
-   if(!id) { res.sendStatus(400).send("Not a valid id provided")}
+   if(!id) { return res.sendStatus(400).send("Not a valid id provided")}
    else {
      await db.delete(id)
      res.send(await db.getAll());
