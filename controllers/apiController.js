@@ -22,11 +22,13 @@ export async function apiCreate(req, res) {
       complete: false,
       date: req.body.date
     }
-    await db.create(newData);
-    res.send(await db.getAll());
+    res.send(await db.create(newData));
   }
 };
 export async function apiUpdate(req, res) {
+  if(!req.body.id) {
+    return res.sendStatus(400).send("Not a valid ID provided")
+  }
   const newData = { 
     id: req.body.id,
     task: req.body.task ? req.body.task : undefined,
