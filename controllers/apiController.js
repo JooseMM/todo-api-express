@@ -14,13 +14,13 @@ import { DbService } from "../services/databaseServices.js";
  };
 
 export async function apiCreate(req, res) {
-  if(!req.body.task) {
+  if(!req.body.task || !req.body.task) {
     return res.sendStatus(400).send("Bad Request: " + req.body.task);
   } else {
     const newData = {
       task: req.body.task,
       complete: false,
-      date: new Date()
+      date: req.body.date
     }
     await db.create(newData);
     res.send(await db.getAll());
