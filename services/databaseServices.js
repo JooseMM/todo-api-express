@@ -16,7 +16,7 @@ export class DbService {
   async create(newData){
     try {
       await this.client.connect();
-      await this.collection.insertOne(newData);
+      return await this.collection.insertOne(newData);
     } 
     catch(err) {
       return 'Error while trying to create a document: ' + err ;
@@ -53,10 +53,10 @@ export class DbService {
       await this.client.connect();
 
       if(updateData.complete) {
-	await this.collection.updateOne({ _id: ID }, { $set: { complete: true }});
+	return await this.collection.updateOne({ _id: ID }, { $set: { complete: true }});
       }
       else {
-	await this.collection.updateOne({ _id: ID }, { $set: { task: updateData.task }});
+	return await this.collection.updateOne({ _id: ID }, { $set: { task: updateData.task }});
       }
 
     } catch(err) {
