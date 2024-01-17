@@ -13,12 +13,24 @@ export class DbService {
   db = this.client.db("todo");
   collection = this.db.collection("tasks");
 
+  async create(newData){
+    try {
+      await this.client.connect();
+      await this.collection.insertOne(newData);
+    } 
+    catch(err) {
+      return 'Error while trying to create a document: ' + err ;
+    } 
+    finally {
+      await this.client.close();
+    }
+  }
   async getAll() {
     try {
       await this.client.connect();
       return await this.collection.find({}).toArray();
     }  catch(err) {
-      console.log("Error at connecting to database:" + err);
+      console.log("Error at connecting to database: " + err);
     } finally {
       await this.client.close();
     }
@@ -35,15 +47,21 @@ export class DbService {
       await this.client.close();
     }
   }
-  async create(newData){
+  async update(updateData) {
     try {
+      const ID = new ObjectId(updateData.id);
       await this.client.connect();
-      await this.collection.insertOne(newData);
-    } 
-    catch(err) {
-      return 'Error while trying to create a document: ' + err ;
-    } 
-    finally {
+
+      if(updateData.complete) {
+	await this.collection.updateOne({ _id: ID }, { $set: { complete: true }});
+      }
+      else {
+	await this.collection.updateOne({ _id: ID }, { $set: { task: updateData.task }});
+      }
+
+    } catch(err) {
+      console.log("Error while trying to update a document" + err);
+    } finally {
       await this.client.close();
     }
   }

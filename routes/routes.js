@@ -1,10 +1,11 @@
 import express from "express";
-import { apiGetAll, apiCreate, apiGet, apiDelete } from "../controllers/apiController.js"
+import { apiGetAll, apiCreate, apiGet, apiDelete, apiUpdate } from "../controllers/apiController.js"
 const router = express.Router();
 
 router.get("/", apiGetAll);
 router.get("/get/:id", apiGet);
 router.post("/", apiCreate);
+router.put("/", apiUpdate);
 router.delete("/delete/:id", apiDelete);
 
 export default router;
