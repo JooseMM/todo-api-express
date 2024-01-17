@@ -34,8 +34,7 @@ export async function apiUpdate(req, res) {
     task: req.body.task ? req.body.task : undefined,
     complete: req.body.complete ? req.body.complete : false,
   }
-  await db.update(newData)
-  res.send(await db.get(newData.id));
+  res.send(await db.update(newData));
 }
  export async function apiDelete(req, res) {
    const id = req.params.id;
