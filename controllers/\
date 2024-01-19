@@ -45,6 +45,6 @@ export async function apiDelete(req, res) {
   }
 };
 export async function apiClear(req, res) {
-  res.send(await db.clear());
+
 };
 

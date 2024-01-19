@@ -76,4 +76,15 @@ export class DbService {
       await this.client.close();
     }
   }
+  async clear() {
+    try {
+      await this.client.connect();
+      await this.collection.deleteMany({ complete: true });
+    } catch(err) {
+      console.log("Error while trying to clear complete documents: " + err);
+    } finally {
+      await this.client.close();
+    }
+
+  }
 }
