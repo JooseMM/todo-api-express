@@ -58,7 +58,6 @@ export async function userLogin(req, res) {
   bcrypt.compare(password, user.password, ( _err, result )=> {
     if(result) {
       const token = Jwt.sign({ id: user.id,  user: username }, process.env.JWT_SECRET, { expiresIn: "7d"});
-      console.log(token);
       res.cookie('token', token, { httpOnly: true });
       return res.json({
 	status: 200,
