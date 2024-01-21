@@ -1,18 +1,16 @@
 import express from "express";
-import { getAllTask, getSingleTask, updateTask, userSignUp, userLogin, createTask, deleteTask, deleteCompleteTasks } from "../controllers/apiController.js"
+import { userLogout, getAllTask, getSingleTask, updateTask, userSignUp, userLogin, createTask, deleteTask, deleteCompleteTasks, tokenAuthentication } from "../controllers/apiController.js"
 const router = express.Router();
 
-//implement middlewares to authenticate tokens
-//and protect some endpoints
-router.get("/tasks/:userId", getAllTask);
+router.get("/tasks", tokenAuthentication, getAllTask);
 router.post("/register", userSignUp)
 router.post("/login", userLogin)
-//do a route for logout
-router.get("/:userId/:taskId", getSingleTask);
-router.post("/task", createTask);
-router.put("/task", updateTask);
-router.delete("/delete/complete", deleteCompleteTasks);
-router.delete("/delete", deleteTask);
+router.get("/logout", tokenAuthentication, userLogout);
+router.get("/:taskId", tokenAuthentication, getSingleTask);
+router.post("/task", tokenAuthentication, createTask);
+router.put("/task", tokenAuthentication, updateTask);
+router.delete("/delete/complete", tokenAuthentication, deleteCompleteTasks);
+router.delete("/delete", tokenAuthentication, deleteTask);
 
 export default router;
 

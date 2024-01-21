@@ -18,11 +18,11 @@ export class DbService {
     try {
       await this.client.connect();
       const response = await this.collection.findOne({ username: name });
-      const { username, password } = response;
-      console.log('this is getuser ' + username, password);
-      return { username, password };
+      const { username, password, _id } = response;
+      const id = new ObjectId(_id).toString();
+      return { userExist: true, username, password, id };
     }catch(error) {
-      return { ok: false, msg: error.message };
+      return { userExist: false, msg: error.message };
     } finally {
       await this.client.close();
     }
