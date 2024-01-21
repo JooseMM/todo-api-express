@@ -11,38 +11,76 @@ export class DbService {
     }
   });
   db = this.client.db("todo");
-  collection = this.db.collection("tasks");
+  collection = this.db.collection("users");
 
-  async create(newData){
+  //users services
+  async getUser(name) {
     try {
       await this.client.connect();
-      return await this.collection.insertOne(newData);
+      const response = await this.collection.findOne({ username: name });
+      const { username, password } = response;
+      console.log('this is getuser ' + username, password);
+      return { username, password };
+    }catch(error) {
+      return { ok: false, msg: error.message };
+    } finally {
+      await this.client.close();
+    }
+  }
+  async createUser(newUser) {
+    try {
+      await this.client.connect();
+      const response = await this.collection.insertOne(newUser);
+      return { ok: true, response };
+    } catch(error){
+      return { ok: false, msg: error.message };
+    } finally {
+      await this.client.close();
+    }
+  }
+  async createTask(newTaskInfo){
+    const { task, date, complete, userId } = newTaskInfo;
+    const newTask = {
+      _id: new ObjectId(),
+      task: task,
+      complete: complete,
+      date: date
+    }
+    const userQuery = { _id: new ObjectId(userId) };
+    const updateQuery = {
+      $push: { 'tasks': newTask }
+    };
+    try {
+      await this.client.connect();
+      const response = await this.collection.updateOne(userQuery, updateQuery);
+      return { ok: true, response };
     } 
-    catch(err) {
-      return 'Error while trying to create a document: ' + err ;
+    catch(error) {
+      return { ok: false, msg: error.message };
     } 
     finally {
       await this.client.close();
     }
   }
-  async getAll() {
+  async getAllTask(userId) {
     try {
       await this.client.connect();
-      return await this.collection.find({}).toArray();
-    }  catch(err) {
-      console.log("Error at connecting to database: " + err);
+      const { tasks } = await this.collection.findOne({ _id: new ObjectId(userId)});
+      return { ok: true, tasks };
+    }  catch(error) {
+      return { ok: false, msg: error.message };
     } finally {
       await this.client.close();
     }
   }
-  async get(id){
+  async getTask(userId, taskId){
     try {
-      const ID = new ObjectId(id);
       await this.client.connect();
-      return await this.collection.find({ _id: ID }).toArray();
-
-    } catch(err){
-      console.log("Error while trying to find a document: " + err);
+      const { tasks } = await this.collection.findOne({ _id: new ObjectId(userId)});
+      const response = tasks.filter((match)=> match._id == taskId);
+      return { ok: true, response};
+    } catch(error){
+      return { ok: false, msg: error.message };
     } finally {
       await this.client.close();
     }
@@ -53,35 +91,43 @@ export class DbService {
       await this.client.connect();
 
       if(updateData.complete) {
-	return await this.collection.updateOne({ _id: ID }, { $set: { complete: true }});
+	const response = await this.collection.updateOne({ "tasks._id": ID }, { $set: { "tasks.$.complete": true}});
+	return { ok: true, response };
       }
       else {
-	return await this.collection.updateOne({ _id: ID }, { $set: { task: updateData.task }});
+	const response = await this.collection.updateOne({ "tasks._id": ID }, { $set: { "tasks.$.task": updateData.task }});
+	return { ok: true, response }
       }
 
-    } catch(err) {
-      console.log("Error while trying to update a document" + err);
+    } catch(error) {
+      return { ok: false, msg: error.message };
     } finally {
       await this.client.close();
     }
   }
-  async delete(id){
+  async delete(deleteInfo){
+    const { taskId, userId } = deleteInfo;
+    const filter = { _id: new ObjectId(userId) };
+    const operation = { $pull: { tasks: { _id: new ObjectId(taskId)}}};
     try {
-      const ID = new ObjectId(id);
       await this.client.connect();
-      await this.collection.deleteOne({ _id: ID });
-    } catch(err) {
-      console.log("Error while trying to delete a document: " + err);
+      const response = await this.collection.updateOne(filter, operation);
+      return { ok: true, response};
+    } catch(error) {
+      return { ok: false, msg: error.message };
     } finally {
       await this.client.close();
     }
   }
-  async clear() {
+  async deleteComplete(userId) {
+    const filter = { _id: new ObjectId(userId) };
+    const operation = { $pull: { tasks: { complete: true }}};
     try {
       await this.client.connect();
-      await this.collection.deleteMany({ complete: true });
-    } catch(err) {
-      console.log("Error while trying to clear complete documents: " + err);
+      const response = await this.collection.updateMany(filter, operation);
+      return { ok: true, response};
+    } catch(error) {
+      return { ok: false, msg: error.message };
     } finally {
       await this.client.close();
     }
