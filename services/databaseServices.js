@@ -20,9 +20,9 @@ export class DbService {
       const response = await this.collection.findOne({ username: name });
       const { username, password, _id } = response;
       const id = new ObjectId(_id).toString();
-      return { userExist: true, username, password, id };
+      return { ok: true, userExist: true, username, password, id };
     }catch(error) {
-      return { userExist: false, msg: error.message };
+      return { ok: false, userExist: false, msg: error.message };
     } finally {
       await this.client.close();
     }
@@ -31,9 +31,9 @@ export class DbService {
     try {
       await this.client.connect();
       const response = await this.collection.insertOne(newUser);
-      return { ok: true, response };
+      return { ok: true, status:200, response };
     } catch(error){
-      return { ok: false, msg: error.message };
+      return { ok: false, status:400, msg: error.message };
     } finally {
       await this.client.close();
     }
