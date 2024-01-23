@@ -1,5 +1,5 @@
 import express from "express";
-import { userLogout, getAllTask, getSingleTask, updateTask, userSignUp, userLogin, createTask, deleteTask, deleteCompleteTasks, tokenAuthentication } from "../controllers/apiController.js"
+import { userLogout, getAllTask, getSingleTask, updateTask, userSignUp, userLogin, createTask, deleteTask, deleteCompleteTasks, tokenAuthentication, isUserLoggedIn } from "../controllers/apiController.js"
 const router = express.Router();
 
 router.get("/tasks", tokenAuthentication, getAllTask);

@@ -108,7 +108,7 @@ export const tokenAuthentication = (req, res, next) => {
     return res.json({ status: 400, ok: false, msg: "User haven''t login", error: error.message });
   }
 }
-export function userLoggedIn(req, res) {
+export function isUserLoggedIn(req, res) {
   const { username } = req.user;
   if(req.user){
     return res.json({ ok: true, user: username, msg: 'User logged in'});
