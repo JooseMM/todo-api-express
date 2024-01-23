@@ -3,9 +3,8 @@
   "builds": [{ "src": "./index.js", "use": "@vercel/node" }],
   "routes": [
     { "src": "/(.*)/(.*)", "dest": "/index.js"},
-    { "src": "/(.*)", "dest": "/index.js"},
     { "src": "/", "dest": "/index.js"},
-    { "src": "/(.*)", "headers": [
+    { "src": "/(.*)", "dest": "/index.js", "headers": [
 	{
 	  "key": "X-Content-Type-Options",
 	  "value": "nosniff"
