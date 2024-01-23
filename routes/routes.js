@@ -9,6 +9,7 @@ router.get("/logout", tokenAuthentication, userLogout);
 router.get("/:taskId", tokenAuthentication, getSingleTask);
 router.post("/task", tokenAuthentication, createTask);
 router.put("/task", tokenAuthentication, updateTask);
+router.get("/userLoggedIn", isUserLoggedIn);
 router.delete("/delete/complete", tokenAuthentication, deleteCompleteTasks);
 router.delete("/delete", tokenAuthentication, deleteTask);
 
