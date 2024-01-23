@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/", router)
-app.get("/", (req, res)=> {
+app.get("/", (_req, res)=> {
   res.send("Hello, this is a basic api to serve a todo list app");
 })
 app.listen(port, () => {
