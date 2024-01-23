@@ -7,9 +7,10 @@
     { "src": "/", "dest": "/index.js"}
 
   ],
-  "headers": {
-    "/*": {
+  "headers": [
+    { "/*": {
       "Access-Control-Allow-Origin": "*"
+      }
     }
-  }
+  ]
 }
