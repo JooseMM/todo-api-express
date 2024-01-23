@@ -61,11 +61,12 @@ export async function userLogin(req, res) {
       res.cookie('token', token, { httpOnly: true });
       return res.json({
 	status: 200,
-	msg: 'login successful'
+	msg: 'login successful',
+	ok: true
       })
     }
     else {
-      return res.json({status: 400, msg: 'Usuario o contraseña incorrecta'});
+      return res.json({status: 400, ok: false, msg: 'Usuario o contraseña incorrecta'});
     }
   });
 }
@@ -105,5 +106,5 @@ export const tokenAuthentication = (req, res, next) => {
 }
 export function userLogout(_req, res) {
   res.clearCookie("token");
-  res.json({ ok: true, msg: 'user has logout'});
+  res.json({ status: 200, ok: true, msg: 'user has logout'});
 }
