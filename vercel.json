@@ -4,22 +4,21 @@
   "routes": [
     { "src": "/(.*)/(.*)", "dest": "/index.js"},
     { "src": "/(.*)", "dest": "/index.js"},
-    { "src": "/", "dest": "/index.js"}
-  ],
-  "source": "/(.*)",
-  "headers": [
-    {
-      "key": "X-Content-Type-Options",
-      "value": "nosniff"
-    },
-    {
-      "key": "X-Frame-Options",
-      "value": "DENY"
-    },
-    {
-      "key": "X-XSS-Protection",
-      "value": "1; mode=block"
+    { "src": "/", "dest": "/index.js"},
+    { "src": "/(.*)", "headers": [
+	{
+	  "key": "X-Content-Type-Options",
+	  "value": "nosniff"
+	},
+	{
+	  "key": "X-Frame-Options",
+	  "value": "DENY"
+	},
+	{
+	  "key": "X-XSS-Protection",
+	  "value": "1; mode=block"
+	}
+      ]
     }
   ]
-
 }
