@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 const port = process.env.PORT || 3000;
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: 'https://todo-app-jm.netlify.app',
   credentials: true,
 }));
 app.use(cookieParser());
