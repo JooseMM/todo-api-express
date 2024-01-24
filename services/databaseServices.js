@@ -53,10 +53,11 @@ export class DbService {
     try {
       await this.client.connect();
       const response = await this.collection.updateOne(userQuery, updateQuery);
-      return { ok: true, response };
+      const { modifiedCount } = response;
+      return { ok: true, status: 201, modifiedCount, insertedId: newTask._id, msg: 'Task stored' };
     } 
     catch(error) {
-      return { ok: false, msg: error.message };
+      return { ok: false, status: 500, modifiedCount: 0, insertedId: undefined, msg: error.message };
     } 
     finally {
       await this.client.close();
@@ -92,15 +93,16 @@ export class DbService {
 
       if(updateData.complete) {
 	const response = await this.collection.updateOne({ "tasks._id": ID }, { $set: { "tasks.$.complete": true}});
-	return { ok: true, response };
+	const { modifiedCount } = response;
+	return { ok: true, status: 200, modifiedCount, msg: "Task modified" };
       }
       else {
 	const response = await this.collection.updateOne({ "tasks._id": ID }, { $set: { "tasks.$.task": updateData.task }});
-	return { ok: true, response }
+	return { ok: true, status: 200, modifiedCount, msg: "Task modified" };
       }
 
     } catch(error) {
-      return { ok: false, msg: error.message };
+	return { ok: false, status: 500, modifiedCount: 0, msg: error.message };
     } finally {
       await this.client.close();
     }
@@ -112,9 +114,10 @@ export class DbService {
     try {
       await this.client.connect();
       const response = await this.collection.updateOne(filter, operation);
-      return { ok: true, response};
+      const { modifiedCount } = response
+      return { ok: true, status: 200, modifiedCount, msg: "Task deleted successfuly"};
     } catch(error) {
-      return { ok: false, msg: error.message };
+      return { ok: false, status: 500, modifiedCount: 0, msg: error.message };
     } finally {
       await this.client.close();
     }
@@ -125,9 +128,10 @@ export class DbService {
     try {
       await this.client.connect();
       const response = await this.collection.updateMany(filter, operation);
-      return { ok: true, response};
+      const { modifiedCount } = response;
+      return { ok: true, status: 200, modifiedCount, msg: "Complete tasks where deleted successfuly"};
     } catch(error) {
-      return { ok: false, msg: error.message };
+      return { ok: false, status: 500, modifiedCount: 0, msg: error.message };
     } finally {
       await this.client.close();
     }

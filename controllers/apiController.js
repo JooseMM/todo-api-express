@@ -51,20 +51,22 @@ export async function userSignUp(req, res) {
 export async function userLogin(req, res) {
   const { username, password } = req.body;
   if( !username || !password ) {
-    return res.json({ ok: false, status: 400, msg: 'Ingreso de nombre de usuario o contraseña invalido'})
+    return res.json({ ok: false, user: undefined, userLoggedIn: false, status: 400, msg: 'Ingreso de nombre de usuario o contraseña invalido'})
   };
   const user = await db.getUser(username);
   if(!user) {
-    return res.json({ ok: false, status: 400, msg: 'Usuario no existe' });
+    return res.json({ ok: false, user: undefined, userLoggedIn: false, status: 400, msg: 'Usuario no existe' });
   };
   bcrypt.compare(password, user.password, ( _err, result )=> {
     if(result) {
       const token = Jwt.sign({ id: user.id,  user: username }, process.env.JWT_SECRET);
-      res.cookie('token', token, { httpOnly: true });
+      res.cookie('token', token, { httpOnly: true, secure: true });
       return res.json({
 	status: 200,
 	msg: 'login successful',
-	ok: true
+	ok: true,
+	user: user.username, 
+	userLoggedIn: true,
       })
     }
     else {
@@ -74,7 +76,7 @@ export async function userLogin(req, res) {
 }
 export async function updateTask(req, res) {
   if(!req.body.id) {
-    return res.json({ ok: false, status:400, msg:"Not a valid ID provided"});
+    return res.json({ ok: false, modifiedCount: 0, status:400, msg:"Not a valid ID provided"});
   }
   const newData = {
     id: req.body.id,
@@ -84,16 +86,16 @@ export async function updateTask(req, res) {
   res.json(await db.update(newData));
 };
 export async function deleteTask(req, res) {
-  if(!req.user.id || !req.body.taskId) {
-    return res.json({status:400, ok:false, msg:"Not valids IDs provided"});
+  if(!req.user.id || !req.params.taskId) {
+    return res.json({status:400, ok:false, msg:"Not valids IDs provided", modifiedCount: 0 });
   }
-  const taskId = req.body.taskId;
+  const taskId = req.params.taskId;
   const userId = req.user.id;
   res.json(await db.delete({ userId, taskId}));
 };
 export async function deleteCompleteTasks(req, res) {
   const  userId = req.user.id;
-  if(!userId) { return res.json({ status: 400, ok:false, msg: 'Bad request'})}
+  if(!userId) { return res.json({ status: 400, ok:false, msg: 'Bad request', modifiedCount: 0 })}
   return res.json(await db.deleteComplete(userId));
 };
 export const tokenAuthentication = (req, res, next) => {

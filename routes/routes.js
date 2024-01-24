@@ -11,7 +11,7 @@ router.post("/login", userLogin)
 router.post("/task", tokenAuthentication, createTask);
 router.put("/task", tokenAuthentication, updateTask);
 router.delete("/delete/complete", tokenAuthentication, deleteCompleteTasks);
-router.delete("/delete", tokenAuthentication, deleteTask);
+router.delete("/delete/:taskId", tokenAuthentication, deleteTask);
 
 export default router;
 
