@@ -6,7 +6,7 @@ const db = new DbService();
 export async function getAllTask (req,res) {
   const userId = req.user.id;
   if(!userId) {
-    return res.send(400).json({ ok:false, status: 400, msg: 'No ID provided'});
+    return res.json({ ok:false, status: 400, msg: 'No ID provided', tasks: undefined});
   }
   res.json(await db.getAllTask(userId));
 };
@@ -98,22 +98,24 @@ export async function deleteCompleteTasks(req, res) {
 };
 export const tokenAuthentication = (req, res, next) => {
   const token = req.cookies.token;
-  if(!token){ return res.json({ status: 400, ok: false, msg: "User haven't login"})}
+  if(!token){ 
+    return res.json({ status: 400, ok: false, userLoggedIn: false,  msg: "User haven't login 1"})
+  }
   try {
     const decodePayload = Jwt.verify(token, process.env.JWT_SECRET);
     req.user = { id: decodePayload.id, username: decodePayload.user };
     next();
   } catch(error) {
     res.clearCookie("token");
-    return res.json({ status: 400, ok: false, msg: "User haven''t login", error: error.message });
+    return res.json({ userLoggedIn: false, status: 400, ok: false, msg: "User haven''t login 2", error: error.message });
   }
 }
 export function isUserLoggedIn(req, res) {
   const { username } = req.user;
   if(req.user){
-    return res.json({ ok: true, user: username, msg: 'User logged in'});
+    return res.json({ ok: true, status:200, userLoggedIn: true, user: username });
   }
-  res.json({ok: false, user: undefined, msg: "User haven't logged in "})
+  res.json({ ok: false, status: 400, userLoggedIn: false, user: undefined, msg: "User haven't logged in 3"})
 }
 export function userLogout(_req, res) {
   res.clearCookie("token");

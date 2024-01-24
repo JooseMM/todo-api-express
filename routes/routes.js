@@ -3,13 +3,13 @@ import { userLogout, getAllTask, getSingleTask, updateTask, userSignUp, userLogi
 const router = express.Router();
 
 router.get("/tasks", tokenAuthentication, getAllTask);
+router.get("/userLoggedIn", tokenAuthentication, isUserLoggedIn);
+router.get("/logout", tokenAuthentication, userLogout);
+router.get("/task/:taskId", tokenAuthentication, getSingleTask);
 router.post("/register", userSignUp)
 router.post("/login", userLogin)
-router.get("/logout", tokenAuthentication, userLogout);
-router.get("/:taskId", tokenAuthentication, getSingleTask);
 router.post("/task", tokenAuthentication, createTask);
 router.put("/task", tokenAuthentication, updateTask);
-router.get("/userLoggedIn", isUserLoggedIn);
 router.delete("/delete/complete", tokenAuthentication, deleteCompleteTasks);
 router.delete("/delete", tokenAuthentication, deleteTask);
 

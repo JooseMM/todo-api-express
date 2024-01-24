@@ -66,9 +66,9 @@ export class DbService {
     try {
       await this.client.connect();
       const { tasks } = await this.collection.findOne({ _id: new ObjectId(userId)});
-      return { ok: true, tasks };
+      return { ok: true, status: 200, msg: 'Successful query', tasks };
     }  catch(error) {
-      return { ok: false, msg: error.message };
+      return { ok: false, status: 400, msg: error.message, tasks: undefined };
     } finally {
       await this.client.close();
     }
