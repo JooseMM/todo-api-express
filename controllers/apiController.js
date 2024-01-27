@@ -60,7 +60,7 @@ export async function userLogin(req, res) {
   bcrypt.compare(password, user.password, ( _err, result )=> {
     if(result) {
       const token = Jwt.sign({ id: user.id,  user: username }, process.env.JWT_SECRET);
-      res.cookie('token', token, { httpOnly: true, secure: true });
+      res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
       return res.json({
 	status: 200,
 	msg: 'login successful',
