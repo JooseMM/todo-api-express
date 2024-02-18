@@ -4,7 +4,6 @@ const router = express.Router();
 
 router.get("/tasks", tokenAuthentication, getAllTask);
 router.get("/userLoggedIn", tokenAuthentication, isUserLoggedIn);
-router.post("/logout", tokenAuthentication, userLogout);
 router.get("/task/:taskId", tokenAuthentication, getSingleTask);
 router.post("/register", userSignUp)
 router.post("/login", userLogin)
@@ -12,6 +11,7 @@ router.post("/task", tokenAuthentication, createTask);
 router.put("/task", tokenAuthentication, updateTask);
 router.delete("/delete/complete", tokenAuthentication, deleteCompleteTasks);
 router.delete("/delete/:taskId", tokenAuthentication, deleteTask);
+router.delete("/logout", tokenAuthentication, userLogout);
 
 export default router;
 
