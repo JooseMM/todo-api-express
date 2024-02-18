@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/tasks", tokenAuthentication, getAllTask);
 router.get("/userLoggedIn", tokenAuthentication, isUserLoggedIn);
-router.get("/logout", tokenAuthentication, userLogout);
+router.post("/logout", tokenAuthentication, userLogout);
 router.get("/task/:taskId", tokenAuthentication, getSingleTask);
 router.post("/register", userSignUp)
 router.post("/login", userLogin)
