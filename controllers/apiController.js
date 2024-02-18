@@ -108,7 +108,7 @@ export const tokenAuthentication = (req, res, next) => {
     req.user = { id: decodePayload.id, username: decodePayload.user };
     next();
   } catch(error) {
-    res.clearCookie("token");
+    res.clearCookie("token", { httpOnly: true, sameSite:'none'});
     return res.json({ userLoggedIn: false, status: 400, ok: false, msg: "User haven''t login 2", error: error.message });
   }
 }
@@ -119,7 +119,8 @@ export function isUserLoggedIn(req, res) {
   }
   res.json({ ok: false, status: 400, userLoggedIn: false, user: undefined, msg: "User haven't logged in 3"})
 }
-export function userLogout(_req, res) {
-  res.clearCookie("token", { htppOnly: true, expires: new Date(0)});
-  res.json({ status: 200, ok: true, msg: 'user has logout'});
+export function userLogout(req, res) {
+  const date = req.params.currentTime;
+  res.clearCookie("token", { htppOnly: true, sameSite: 'none', expires: new Date(0)});
+  res.json({ status: 200, ok: true, msg: `user has logout, id:${date}`});
 }
