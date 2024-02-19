@@ -109,6 +109,7 @@ export const tokenAuthentication = (req, res, next) => {
     next();
   } catch(error) {
     res.clearCookie("token", { httpOnly: true, sameSite:'none'});
+    res.cookie("token", null, { httpOnly: true, sameSite: 'none', maxAge: 0});
     return res.json({ userLoggedIn: false, status: 400, ok: false, msg: "User haven''t login 2", error: error.message });
   }
 }
