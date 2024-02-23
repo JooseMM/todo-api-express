@@ -127,8 +127,7 @@ export function isUserLoggedIn(req, res) {
 }
 export function userLogout(req, res) {
   const date = req.params.currentTime;
-  res.clearCookie("token", { httpOnly: true, sameSite: 'lax', expires: new Date(0)});
-  res.cookie("token", null, { httpOnly: true, sameSite: 'lax', maxAge: 0});
+  res.clearCookie("token", { httpOnly: true, sameSite: 'none', expires: new Date(0)});
+  res.cookie("token", null, { httpOnly: true, sameSite: 'none', maxAge: 0});
   res.json({ status: 200, ok: true, msg: `user has logout, id:${date}`});
-  res.user = null;
 }
