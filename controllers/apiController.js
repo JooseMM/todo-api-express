@@ -60,7 +60,7 @@ export async function userLogin(req, res) {
   bcrypt.compare(password, user.password, ( _err, result )=> {
     if(result) {
       const token = Jwt.sign({ id: user.id,  user: username }, process.env.JWT_SECRET, { expiresIn: '24h' });
-      res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Lax' });
+      res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'None' });
       return res.json({
 	status: 200,
 	msg: 'login successful',
@@ -128,7 +128,7 @@ export function isUserLoggedIn(req, res) {
 }
 export function userLogout(req, res) {
   const date = req.params.currentTime;
-  res.clearCookie("token", { httpOnly: true, sameSite: 'Lax', expires: new Date(0)});
-  res.cookie("token", null, { httpOnly: true, sameSite: 'Lax', maxAge: 0});
+  res.clearCookie("token", { httpOnly: true, secure: true, sameSite: 'None', expires: new Date(0)});
+  res.cookie("token", null, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 0});
   res.json({ status: 200, ok: true, msg: `user has logout, id:${date}`});
 }
