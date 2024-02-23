@@ -114,8 +114,8 @@ export const tokenAuthentication = (req, res, next) => {
       }	
     })
   } catch(error) {
-    res.clearCookie("token", { httpOnly: true, sameSite:'none'});
-    res.cookie("token", null, { httpOnly: true, sameSite: 'none', maxAge: 0});
+    res.clearCookie("token", { httpOnly: true, sameSite:'None'});
+    res.cookie("token", null, { httpOnly: true, sameSite: 'None', maxAge: 0});
     return res.json({ userLoggedIn: false, status: 400, ok: false, msg: "User haven''t login 2", error: error.message });
   }
 }
@@ -128,7 +128,7 @@ export function isUserLoggedIn(req, res) {
 }
 export function userLogout(req, res) {
   const date = req.params.currentTime;
-  res.clearCookie("token", { httpOnly: true, sameSite: 'Strict', expires: new Date(0)});
-  res.cookie("token", null, { httpOnly: true, sameSite: 'Strict', maxAge: 0});
+  res.clearCookie("token", { httpOnly: true, sameSite: 'None', expires: new Date(0)});
+  res.cookie("token", null, { httpOnly: true, sameSite: 'None', maxAge: 0});
   res.json({ status: 200, ok: true, msg: `user has logout, id:${date}`});
 }
