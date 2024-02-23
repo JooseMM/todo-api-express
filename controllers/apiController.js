@@ -59,7 +59,7 @@ export async function userLogin(req, res) {
   };
   bcrypt.compare(password, user.password, ( _err, result )=> {
     if(result) {
-      const token = Jwt.sign({ id: user.id,  user: username }, process.env.JWT_SECRET);
+      const token = Jwt.sign({ id: user.id,  user: username }, process.env.JWT_SECRET, { expiresIn: '24h' });
       res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
       return res.json({
 	status: 200,
@@ -101,12 +101,17 @@ export async function deleteCompleteTasks(req, res) {
 export const tokenAuthentication = (req, res, next) => {
   const token = req.cookies.token;
   if(!token){ 
-    return res.json({ status: 400, ok: false, userLoggedIn: false,  msg: "User haven't login 1"})
+    return res.json({ status: 400, ok: false, userLoggedIn: false,  msg: "User haven't login"})
   }
   try {
-    const decodePayload = Jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decodePayload.id, username: decodePayload.user };
-    next();
+    Jwt.verify(token, process.env.JWT_SECRET, (err, decoded )=> {
+      if(err) {
+	return res.json({ status: 400, ok: false, userLoggedIn: false,  msg: "User haven't login"})
+      } else {
+	req.user = { id: decoded.id, username: decoded.user };
+	next();
+      }	
+    })
   } catch(error) {
     res.clearCookie("token", { httpOnly: true, sameSite:'none'});
     res.cookie("token", null, { httpOnly: true, sameSite: 'none', maxAge: 0});
@@ -122,7 +127,8 @@ export function isUserLoggedIn(req, res) {
 }
 export function userLogout(req, res) {
   const date = req.params.currentTime;
-  res.clearCookie("token", { httpOnly: true, sameSite: 'none', expires: new Date(0)});
-  res.cookie("token", null, { httpOnly: true, sameSite: 'none', maxAge: 0});
+  res.clearCookie("token", { httpOnly: true, sameSite: 'lax', expires: new Date(0)});
+  res.cookie("token", null, { httpOnly: true, sameSite: 'lax', maxAge: 0});
   res.json({ status: 200, ok: true, msg: `user has logout, id:${date}`});
+  res.user = null;
 }

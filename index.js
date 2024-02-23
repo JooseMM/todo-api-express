@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(cors({
   origin: 'https://todo-app-jm.netlify.app',
+  //origin: 'http://localhost:4200',
   credentials: true,
 }));
 app.use(cookieParser());
